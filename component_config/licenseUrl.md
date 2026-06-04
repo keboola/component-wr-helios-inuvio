@@ -1,0 +1,1 @@
+https://github.com/keboola/component-wr-helios-inuvio/blob/master/LICENSE.md
