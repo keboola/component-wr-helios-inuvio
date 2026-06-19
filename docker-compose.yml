@@ -1,19 +1,24 @@
 services:
-  # for development purposes
+  # Runs the component like production (prod-only deps) against ./data, with live code mounted.
   dev:
-    build: .
+    build:
+      context: .
+      target: production
     volumes:
         - ./:/code
         - ./data:/data
     environment:
       - KBC_DATADIR=./data
+  # Uses the `test` stage (all dependency groups installed), so ruff + pytest are available.
   test:
-    # Use to run flake8 and unittests checks
-    build: .
+    build:
+      context: .
+      target: test
     volumes:
       - ./:/code
       - ./data:/data
     environment:
       - KBC_DATADIR=./data
     command:
-      - python -m pytest tests/ --tb=short -q
+      - /bin/sh
+      - /code/scripts/build_n_test.sh
