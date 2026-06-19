@@ -1,0 +1,5 @@
+{
+  "id": "in.c-main.organizations",
+  "name": "organizations",
+  "columns": ["name", "city"]
+}

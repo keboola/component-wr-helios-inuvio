@@ -1,1 +1,1 @@
-https://github.com/keboola/component-wr-helios-inuvio/blob/master/README.md
+https://github.com/keboola/component-wr-helios-inuvio/blob/main/README.md

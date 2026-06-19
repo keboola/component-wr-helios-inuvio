@@ -1,1 +1,132 @@
-{}
+{
+  "type": "object",
+  "title": "Write Target",
+  "properties": {
+    "browse": {
+      "type": "string",
+      "title": "Browse",
+      "format": "select",
+      "enum": [],
+      "description": "Helios browse to write to. Values are 'Browse Name (id)'; a bare id also works.",
+      "options": {
+        "async": {
+          "label": "Re-load browses",
+          "action": "list_browses",
+          "autoload": true
+        },
+        "creatable": true
+      },
+      "propertyOrder": 1
+    },
+    "write_mode": {
+      "type": "string",
+      "title": "Write Mode",
+      "format": "select",
+      "default": "create",
+      "description": "Create inserts a new record per row (non-idempotent — re-running duplicates rows in Helios). Update modifies existing records by Key Field.",
+      "enum": [
+        "create",
+        "update"
+      ],
+      "options": {
+        "enum_titles": [
+          "Create",
+          "Update"
+        ]
+      },
+      "propertyOrder": 2
+    },
+    "key_field": {
+      "type": "string",
+      "title": "Key Field",
+      "description": "Record identifier used for updates",
+      "options": {
+        "dependencies": {
+          "write_mode": "update"
+        }
+      },
+      "propertyOrder": 3
+    },
+    "field_mapping": {
+      "type": "array",
+      "title": "Field Mapping",
+      "format": "table",
+      "description": "Map input columns to Helios fields. Use 'Re-load mapping' to populate; existing rows are preserved.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_column": {
+            "type": "string",
+            "title": "Source Column",
+            "required": true,
+            "options": {
+              "readOnly": true
+            }
+          },
+          "destination_field": {
+            "type": "string",
+            "title": "Destination Field",
+            "format": "select",
+            "required": true,
+            "watch": {
+              "api_fields": "_metadata_.api_fields"
+            },
+            "enumSource": [
+              {
+                "source": "api_fields",
+                "value": "{{item.field_name}}",
+                "title": "{{item.label}}"
+              }
+            ],
+            "options": {
+              "creatable": true
+            }
+          }
+        }
+      },
+      "propertyOrder": 4
+    },
+    "load_mapping": {
+      "type": "button",
+      "format": "sync-action",
+      "title": "Re-load Mapping",
+      "options": {
+        "async": {
+          "label": "Re-load mapping",
+          "action": "load_field_mapping",
+          "autoload": [
+            "browse"
+          ],
+          "cache": false
+        }
+      },
+      "propertyOrder": 5
+    },
+    "continue_on_error": {
+      "type": "boolean",
+      "title": "Continue on Error",
+      "format": "checkbox",
+      "default": false,
+      "description": "Write failed records to failed_records.csv instead of failing the job.",
+      "propertyOrder": 6
+    },
+    "debug": {
+      "type": "boolean",
+      "title": "Debug Mode",
+      "format": "checkbox",
+      "default": false,
+      "propertyOrder": 7
+    },
+    "_metadata_": {
+      "type": "object",
+      "options": {
+        "hidden": true
+      },
+      "properties": {
+        "api_fields": {
+          "type": "array"
+        }
+      }
+    }
+  }
+}
