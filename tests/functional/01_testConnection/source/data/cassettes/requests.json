@@ -1,0 +1,7 @@
+{
+  "_metadata": {"freeze_time": "2026-06-05T01:34:03", "keboola_vcr_version": "0.5.0", "recorded_at": "2026-06-04T23:34:04.741889+00:00"},
+  "interactions": [
+    {"request": {"body": "grant_type=REDACTED&username=test-api&password=REDACTED&windowsAuthentication=REDACTED", "headers": {"Accept": ["*/*"], "Content-Length": ["91"], "Content-Type": ["application/x-www-form-urlencoded"]}, "method": "POST", "uri": "http://localhost:8080/oauth/token"}, "response": {"body": {"string": "{\"access_token\": \"REDACTED\", \"token_type\": \"Bearer\", \"expires_in\": \"1800\"}"}, "headers": {"Content-Length": ["296"], "Content-Type": ["text/html; charset=utf-8"]}, "status": {"code": 200, "message": "OK"}}}
+  ],
+  "version": 1
+}

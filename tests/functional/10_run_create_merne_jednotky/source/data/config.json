@@ -1,0 +1,38 @@
+{
+  "action": "run",
+  "parameters": {
+    "connection": {
+      "server": "http://localhost:8080",
+      "username": "DUMMY_USER",
+      "#password": "DUMMY_PASSWORD",
+      "database": "HEE_Helios_001"
+    },
+    "browse": "M\u011brn\u00e9 jednotky (11)",
+    "write_mode": "create",
+    "continue_on_error": false,
+    "field_mapping": [
+      {
+        "source_column": "kod",
+        "destination_field": "TabMJ.Kod"
+      },
+      {
+        "source_column": "nazev",
+        "destination_field": "TabMJ.Nazev"
+      }
+    ]
+  },
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-main.merne_jednotky",
+          "destination": "merne_jednotky.csv",
+          "columns": [
+            "kod",
+            "nazev"
+          ]
+        }
+      ]
+    }
+  }
+}

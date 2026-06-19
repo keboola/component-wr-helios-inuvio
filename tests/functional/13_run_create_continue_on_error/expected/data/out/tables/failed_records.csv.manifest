@@ -1,0 +1,1 @@
+{"write_always": true, "delimiter": ",", "enclosure": "\"", "manifest_type": "out", "has_header": true, "schema": [{"name": "TabCisOrg.Nazev", "data_type": {"base": {"type": "STRING"}}, "nullable": true}, {"name": "TabCisOrg.Misto", "data_type": {"base": {"type": "STRING"}}, "nullable": true}, {"name": "error", "data_type": {"base": {"type": "STRING"}}, "nullable": true}]}

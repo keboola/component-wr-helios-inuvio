@@ -1,0 +1,18 @@
+{
+  "exit_code": null,
+  "stderr": "",
+  "logs": [
+    {
+      "level": "INFO",
+      "logger": "root",
+      "message": "Authenticated against Helios iNuvio.",
+      "timestamp": "2026-06-17T09:11:01.000Z"
+    },
+    {
+      "level": "INFO",
+      "logger": "root",
+      "message": "Wrote 1 record(s) to 'Kontaktn\u00ed osoby (115)'.",
+      "timestamp": "2026-06-17T09:11:01.000Z"
+    }
+  ]
+}

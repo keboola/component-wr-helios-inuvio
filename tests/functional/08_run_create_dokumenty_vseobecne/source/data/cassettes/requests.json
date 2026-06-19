@@ -1,0 +1,8 @@
+{
+  "_metadata": {"freeze_time": "2026-06-17T09:11:01", "keboola_vcr_version": "0.5.0", "recorded_at": "2026-06-17T07:11:09.700779+00:00"},
+  "interactions": [
+    {"request": {"body": "grant_type=REDACTED&username=test-api&password=REDACTED&windowsAuthentication=REDACTED", "headers": {"Accept": ["*/*"], "Content-Length": ["91"], "Content-Type": ["application/x-www-form-urlencoded"]}, "method": "POST", "uri": "http://localhost:8080/oauth/token"}, "response": {"body": {"string": "{\"access_token\": \"REDACTED\", \"token_type\": \"Bearer\", \"expires_in\": \"1800\"}"}, "headers": {"Content-Length": ["296"], "Content-Type": ["text/html; charset=utf-8"]}, "status": {"code": 200, "message": "OK"}}},
+    {"request": {"body": "{\"row\": {\"TabDokumenty.UlozenoDB\": \"false\"}}", "headers": {"Accept": ["*/*"], "Content-Length": ["44"], "Content-Type": ["application/json"]}, "method": "POST", "uri": "http://localhost:8080/api/v1/browses/data/HEE_Helios_001/1873"}, "response": {"body": {"string": "{\"id\":8}"}, "headers": {"Content-Length": ["8"], "Content-Type": ["application/json; charset=utf-8"]}, "status": {"code": 201, "message": "Created"}}}
+  ],
+  "version": 1
+}

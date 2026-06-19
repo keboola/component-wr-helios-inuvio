@@ -1,0 +1,33 @@
+{
+  "action": "run",
+  "parameters": {
+    "connection": {
+      "server": "http://localhost:8080",
+      "username": "DUMMY_USER",
+      "#password": "DUMMY_PASSWORD",
+      "database": "HEE_Helios_001"
+    },
+    "browse": "Dokumenty v\u0161eobecn\u00e9 (1873)",
+    "write_mode": "create",
+    "continue_on_error": false,
+    "field_mapping": [
+      {
+        "source_column": "ulozeno_db",
+        "destination_field": "TabDokumenty.UlozenoDB"
+      }
+    ]
+  },
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-main.dokumenty_vseobecne",
+          "destination": "dokumenty_vseobecne.csv",
+          "columns": [
+            "ulozeno_db"
+          ]
+        }
+      ]
+    }
+  }
+}
