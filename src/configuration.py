@@ -1,26 +1,44 @@
-import logging
+from enum import StrEnum
 
 from keboola.component.exceptions import UserException
-from pydantic import BaseModel, Field, ValidationError, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 
-class Configuration(BaseModel):
-    print_hello: bool
-    api_token: str = Field(alias="#api_token")
-    debug: bool = False
+class WriteMode(StrEnum):
+    CREATE = "create"
+    UPDATE = "update"
+
+
+class FieldMapping(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    source_column: str = ""
+    destination_field: str = ""
+
+
+class Connection(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+    server: str
+    username: str
+    password: str = Field(alias="#password")
+    database: str
+
+
+class _Base(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
 
     def __init__(self, **data):
         try:
             super().__init__(**data)
         except ValidationError as e:
-            error_messages = [f"{err['loc'][0]}: {err['msg']}" for err in e.errors()]
-            raise UserException(f"Validation Error: {', '.join(error_messages)}")
+            messages = [f"{'.'.join(str(p) for p in err['loc'])}: {err['msg']}" for err in e.errors()]
+            raise UserException(f"Validation Error: {', '.join(messages)}") from e
 
-        if self.debug:
-            logging.debug("Component will run in Debug mode")
 
-    @field_validator("api_token")
-    def token_must_be_uppercase(cls, v):
-        if not v.isupper():
-            raise UserException("API token must be uppercase")
-        return v
+class Configuration(_Base):
+    connection: Connection
+    browse: str = ""
+    write_mode: WriteMode = WriteMode.CREATE
+    key_field: str = ""
+    field_mapping: list[FieldMapping] = Field(default_factory=list)
+    continue_on_error: bool = False
+    debug: bool = False
