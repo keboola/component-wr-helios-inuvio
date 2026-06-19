@@ -95,6 +95,7 @@ def test_run_writes_all_rows(mock_client_cls, tmp_path):
 @mock.patch("component.HeliosInuvioClient")
 def test_run_writes_failed_records_csv(mock_client_cls, tmp_path):
     import csv as _csv
+    import json as _json
 
     data = _write_config(tmp_path, continue_on_error=True)
     client = mock_client_cls.return_value
@@ -108,8 +109,11 @@ def test_run_writes_failed_records_csv(mock_client_cls, tmp_path):
     assert failed.exists()
     with open(failed) as f:
         rows = list(_csv.DictReader(f))
+    # Fixed, browse-agnostic schema; the rejected record is captured as a JSON payload + error.
+    assert set(rows[0].keys()) == {"config_row_id", "primary_key", "payload", "error"}
     assert rows[0]["error"] == "boom"
-    assert {"Alpha", "Beta", "error"} == set(rows[0].keys())
+    assert rows[0]["primary_key"] == ""  # create mode has no key field
+    assert _json.loads(rows[0]["payload"]) == {"Alpha": "3", "Beta": "4"}
     # The manifest is written (destination is resolved by the component's defaultBucket).
     assert (data / "out" / "tables" / "failed_records.csv.manifest").exists()
 

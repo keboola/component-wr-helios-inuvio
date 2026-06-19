@@ -29,6 +29,8 @@ def test_create_load(mock_client_cls):
 
 @mock.patch("component.HeliosInuvioClient")
 def test_continue_on_error_writes_failed_records(mock_client_cls):
+    import json
+
     path = _datadir("test_continue_on_error")
     client = mock_client_cls.return_value
     client.write_batch.return_value = [None, {"row": {"Name": "Globex", "City": "Brno"}, "error": "boom"}]
@@ -38,3 +40,4 @@ def test_continue_on_error_writes_failed_records(mock_client_cls):
     with open(failed) as f:
         rows = list(csv.DictReader(f))
     assert rows[0]["error"] == "boom"
+    assert json.loads(rows[0]["payload"]) == {"City": "Brno", "Name": "Globex"}

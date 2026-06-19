@@ -1,2 +1,2 @@
-TabCisOrg.Nazev,TabCisOrg.Misto,error
-Bad Org,,TabCisOrg.Misto is required
+config_row_id,primary_key,payload,error
+,,"{""TabCisOrg.Misto"": """", ""TabCisOrg.Nazev"": ""Bad Org""}",TabCisOrg.Misto is required

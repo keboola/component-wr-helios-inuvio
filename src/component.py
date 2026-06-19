@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 import re
 from collections.abc import Iterator
@@ -21,16 +22,19 @@ VCR_SANITIZERS = [
 
 FAILED_RECORDS_TABLE = "failed_records.csv"
 
+FAILED_RECORDS_SCHEMA = ["config_row_id", "primary_key", "payload", "error"]
+
 
 class _FailedRecordsWriter:
-    """Streams rejected records to failed_records.csv, opening the file lazily on the first
-    failure and flushing after every row. Writing incrementally (rather than buffering the whole
-    batch) means a mid-run crash keeps the failures captured so far. The table + manifest are only
-    emitted when at least one record actually failed."""
+    """Streams rejected records to failed_records.csv, opening the file lazily on the first failure
+    and flushing after every row, so a mid-run crash keeps the failures captured so far. The table
+    is append-only (incremental load, no primary key) with a fixed schema, so every config row and
+    run accumulates into the same table without column collisions. Emitted only on a real failure."""
 
-    def __init__(self, component: ComponentBase, fieldnames: list[str]):
+    def __init__(self, component: ComponentBase, config_row_id: str, key_field: str):
         self._component = component
-        self._fieldnames = [*fieldnames, "error"]
+        self._config_row_id = config_row_id
+        self._key_field = key_field
         self._file: IO[str] | None = None
         self._writer: csv.DictWriter | None = None
         self._out_def: TableDefinition | None = None
@@ -38,19 +42,30 @@ class _FailedRecordsWriter:
 
     def write(self, failure: dict[str, Any]) -> None:
         if self._writer is None:
-            # No explicit destination is set here: the table relies on the component's
-            # `defaultBucket` (configured in the Developer Portal) to resolve where it lands
-            # in Storage.
+            # No explicit destination: the table relies on the component's `defaultBucket`
+            # (configured in the Developer Portal). incremental=True with no primary key makes
+            # it append-only, so failures from every row/run stack up rather than overwrite.
             self._out_def = self._component.create_out_table_definition(
                 FAILED_RECORDS_TABLE,
                 write_always=True,
-                schema=self._fieldnames,
+                incremental=True,
+                primary_key=[],
+                schema=FAILED_RECORDS_SCHEMA,
                 has_header=True,
             )
             self._file = open(self._out_def.full_path, "w", newline="", encoding="utf-8")
-            self._writer = csv.DictWriter(self._file, fieldnames=self._fieldnames, extrasaction="ignore")
+            self._writer = csv.DictWriter(self._file, fieldnames=FAILED_RECORDS_SCHEMA, extrasaction="ignore")
             self._writer.writeheader()
-        self._writer.writerow({**failure["row"], "error": failure["error"]})
+        row = failure["row"]
+        self._writer.writerow(
+            {
+                "config_row_id": self._config_row_id,
+                # The Helios record id for update mode (the key field's value); empty for create.
+                "primary_key": str(row.get(self._key_field, "")) if self._key_field else "",
+                "payload": json.dumps(row, ensure_ascii=False, sort_keys=True),
+                "error": failure["error"],
+            }
+        )
         assert self._file is not None  # opened together with self._writer above
         self._file.flush()
         self.count += 1
@@ -85,8 +100,11 @@ class Component(ComponentBase):
         # The failed-records writer (and its open file handle) only exists when continue_on_error
         # is on — otherwise write_batch raises on the first rejection and no failures are collected,
         # so there is nothing to write and no reason to hold the writer for the whole run.
-        dest_fields = list(dict.fromkeys(dest for _, dest in active))
-        failed = _FailedRecordsWriter(self, dest_fields) if config.continue_on_error else None
+        failed = (
+            _FailedRecordsWriter(self, self.environment_variables.config_row_id or "", config.key_field)
+            if config.continue_on_error
+            else None
+        )
         ok = 0
         try:
             self._client.authenticate()
