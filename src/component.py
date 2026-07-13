@@ -120,7 +120,8 @@ class Component(ComponentBase):
                 elif failed is not None:
                     failed.write(outcome)
         except HeliosInuvioClientError as exc:
-            raise UserException(str(exc)) from exc
+            message = f"{exc} Helios iNuvio said: {exc.detail}" if exc.detail else str(exc)
+            raise UserException(message) from exc
         finally:
             if failed is not None:
                 failed.close()
