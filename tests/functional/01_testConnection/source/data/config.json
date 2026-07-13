@@ -1,0 +1,11 @@
+{
+  "action": "testConnection",
+  "parameters": {
+    "connection": {
+      "server": "http://localhost:8080",
+      "username": "DUMMY_USER",
+      "#password": "DUMMY_PASSWORD",
+      "database": "HEE_Helios_001"
+    }
+  }
+}

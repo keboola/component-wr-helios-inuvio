@@ -1,19 +1,52 @@
 {
   "type": "object",
-  "title": "extractor configuration",
-  "required": [
-    "print_hello"
-  ],
+  "title": "Helios iNuvio Connection",
   "properties": {
-    "print_hello": {
-      "type": "boolean",
-      "title": "Print Hello",
-      "propertyOrder": 1
+    "connection": {
+      "type": "object",
+      "title": "Connection",
+      "required": true,
+      "propertyOrder": 1,
+      "properties": {
+        "server": {
+          "type": "string",
+          "title": "Server URL",
+          "description": "iNuvio Server / eServer base URL, e.g. http://localhost:8080",
+          "required": true,
+          "propertyOrder": 1
+        },
+        "username": {
+          "type": "string",
+          "title": "Username",
+          "required": true,
+          "propertyOrder": 2
+        },
+        "#password": {
+          "type": "string",
+          "title": "Password",
+          "format": "password",
+          "required": true,
+          "propertyOrder": 3
+        },
+        "database": {
+          "type": "string",
+          "title": "Database",
+          "description": "Helios database name, e.g. HEE_Helios_001",
+          "required": true,
+          "propertyOrder": 4
+        }
+      }
     },
-    "debug": {
-      "type": "boolean",
-      "title": "Debug",
-      "propertyOrder": 2
+    "test_connection": {
+      "type": "button",
+      "format": "test-connection",
+      "propertyOrder": 2,
+      "options": {
+        "async": {
+          "label": "Test Connection",
+          "action": "testConnection"
+        }
+      }
     }
   }
 }

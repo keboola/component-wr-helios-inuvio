@@ -1,0 +1,33 @@
+{
+  "parameters": {
+    "connection": {
+      "server": "http://localhost:8080",
+      "username": "u",
+      "#password": "p",
+      "database": "db"
+    },
+    "browse": "organizations",
+    "write_mode": "create",
+    "field_mapping": [
+      {
+        "source_column": "name",
+        "destination_field": "Name"
+      },
+      {
+        "source_column": "city",
+        "destination_field": "City"
+      }
+    ],
+    "continue_on_error": true
+  },
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-main.input",
+          "destination": "input.csv"
+        }
+      ]
+    }
+  }
+}

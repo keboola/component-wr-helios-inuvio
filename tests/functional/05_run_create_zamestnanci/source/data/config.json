@@ -1,0 +1,38 @@
+{
+  "action": "run",
+  "parameters": {
+    "connection": {
+      "server": "http://localhost:8080",
+      "username": "DUMMY_USER",
+      "#password": "DUMMY_PASSWORD",
+      "database": "HEE_Helios_001"
+    },
+    "browse": "Zam\u011bstnanci (86)",
+    "write_mode": "create",
+    "continue_on_error": false,
+    "field_mapping": [
+      {
+        "source_column": "jmeno",
+        "destination_field": "TabCisZam.Jmeno"
+      },
+      {
+        "source_column": "prijmeni",
+        "destination_field": "TabCisZam.Prijmeni"
+      }
+    ]
+  },
+  "storage": {
+    "input": {
+      "tables": [
+        {
+          "source": "in.c-main.zamestnanci",
+          "destination": "zamestnanci.csv",
+          "columns": [
+            "jmeno",
+            "prijmeni"
+          ]
+        }
+      ]
+    }
+  }
+}

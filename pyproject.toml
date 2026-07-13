@@ -24,3 +24,7 @@ target-version = "py314"
 
 [tool.ruff.lint]
 extend-select = ["I", "UP", "G"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

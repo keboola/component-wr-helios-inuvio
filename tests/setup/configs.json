@@ -1,0 +1,388 @@
+[
+  {
+    "name": "01_testConnection",
+    "description": "testConnection sync action — authenticate against the sandbox (read-only)",
+    "config": {
+      "action": "testConnection",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        }
+      }
+    }
+  },
+  {
+    "name": "02_list_browses",
+    "description": "list_browses sync action — list writable browses for the UI dropdown (read-only)",
+    "config": {
+      "action": "list_browses",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        }
+      }
+    }
+  },
+  {
+    "name": "03_load_field_mapping",
+    "description": "load_field_mapping sync action for Organizace (browseIdent 1) — fuzzy-map input columns to API fields (read-only)",
+    "config": {
+      "action": "load_field_mapping",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "1"
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.organizations",
+              "destination": "organizations.csv",
+              "columns": [
+                "name",
+                "city"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "04_run_create",
+    "description": "run write path — create one Organizace record (browseIdent 1) from the input table",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "1",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "name",
+            "destination_field": "TabCisOrg.Nazev"
+          },
+          {
+            "source_column": "city",
+            "destination_field": "TabCisOrg.Misto"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.organizations",
+              "destination": "organizations.csv",
+              "columns": [
+                "name",
+                "city"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "05_run_create_zamestnanci",
+    "description": "run create — Zaměstnanci (browseIdent 86)",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "Zaměstnanci (86)",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "jmeno",
+            "destination_field": "TabCisZam.Jmeno"
+          },
+          {
+            "source_column": "prijmeni",
+            "destination_field": "TabCisZam.Prijmeni"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.zamestnanci",
+              "destination": "zamestnanci.csv",
+              "columns": [
+                "jmeno",
+                "prijmeni"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "06_run_create_kontaktni_osoby",
+    "description": "run create — Kontaktní osoby (browseIdent 115)",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "Kontaktní osoby (115)",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "prijmeni",
+            "destination_field": "TabCisKOs.Prijmeni"
+          },
+          {
+            "source_column": "jmeno",
+            "destination_field": "TabCisKOs.Jmeno"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.kontaktni_osoby",
+              "destination": "kontaktni_osoby.csv",
+              "columns": [
+                "prijmeni",
+                "jmeno"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "07_run_create_dokumenty",
+    "description": "run create — Dokumenty (browseIdent 5)",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "Dokumenty (5)",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "ulozeno_db",
+            "destination_field": "TabDokumenty.UlozenoDB"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.dokumenty",
+              "destination": "dokumenty.csv",
+              "columns": [
+                "ulozeno_db"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "08_run_create_dokumenty_vseobecne",
+    "description": "run create — Dokumenty všeobecné (browseIdent 1873)",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "Dokumenty všeobecné (1873)",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "ulozeno_db",
+            "destination_field": "TabDokumenty.UlozenoDB"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.dokumenty_vseobecne",
+              "destination": "dokumenty_vseobecne.csv",
+              "columns": [
+                "ulozeno_db"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "09_run_create_agenda_dokumentu",
+    "description": "run create — Agenda dokumentů (browseIdent 2367)",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "Agenda dokumentů (2367)",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "kod",
+            "destination_field": "TabDokumentyAgenda.Kod"
+          },
+          {
+            "source_column": "nazev",
+            "destination_field": "TabDokumentyAgenda.Nazev"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.agenda_dokumentu",
+              "destination": "agenda_dokumentu.csv",
+              "columns": [
+                "kod",
+                "nazev"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "10_run_create_merne_jednotky",
+    "description": "run create — Měrné jednotky (browseIdent 11)",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "Měrné jednotky (11)",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "kod",
+            "destination_field": "TabMJ.Kod"
+          },
+          {
+            "source_column": "nazev",
+            "destination_field": "TabMJ.Nazev"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.merne_jednotky",
+              "destination": "merne_jednotky.csv",
+              "columns": [
+                "kod",
+                "nazev"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "11_run_create_skupiny_karet",
+    "description": "run create — Skupiny karet (browseIdent 15)",
+    "config": {
+      "action": "run",
+      "parameters": {
+        "connection": {
+          "server": "http://localhost:8080",
+          "username": "DUMMY_USER",
+          "#password": "DUMMY_PASSWORD",
+          "database": "HEE_Helios_001"
+        },
+        "browse": "Skupiny karet (15)",
+        "write_mode": "create",
+        "continue_on_error": false,
+        "field_mapping": [
+          {
+            "source_column": "skup_zbo",
+            "destination_field": "TabSkupinyZbozi.SkupZbo"
+          },
+          {
+            "source_column": "nazev",
+            "destination_field": "TabSkupinyZbozi.Nazev"
+          }
+        ]
+      },
+      "storage": {
+        "input": {
+          "tables": [
+            {
+              "source": "in.c-main.skupiny_karet",
+              "destination": "skupiny_karet.csv",
+              "columns": [
+                "skup_zbo",
+                "nazev"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+]

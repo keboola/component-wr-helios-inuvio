@@ -15,5 +15,10 @@ venv
 
 # vcr datadirtesting
 secrets.json
+tests/functional/*/source/data/config.secrets.json
 tests/functional/*/source/data/out/
-tests/functional/*/source/data/in/
+# NOTE: source/data/in/ is intentionally NOT ignored — for writer run tests the input
+# tables under in/tables/ are committed fixtures the VCR replay needs (CI has no scaffold step).
+
+# datadir test generated outputs
+tests/data/*/out/
